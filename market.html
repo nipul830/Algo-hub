@@ -1,53 +1,132 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>JK Algo — Market</title>
-<link rel="icon" href="icon.png"/><link rel="stylesheet" href="style.css"/>
-<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1420;--card:#121a27;--muted:#9fb0c3;--text:#e8f0ff;--border:#1e2a3d;--accent:#3aa0ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui}
+a{color:inherit;text-decoration:none}
+.nav{position:sticky;top:0;z-index:20;background:#0e1521cc;backdrop-filter:blur(6px);border-bottom:1px solid var(--border)}
+.nav .row{max-width:1100px;margin:auto;display:flex;align-items:center;gap:14px;padding:10px 14px}
+.brand{font-weight:700}
+.tabs{margin-left:auto;display:flex;gap:8px}
+.tab{padding:10px 14px;border-radius:12px;color:#cfe0ff}
+.tab.active{background:var(--card);color:#fff;box-shadow:inset 0 -2px 0 0 var(--accent)}
+
+.badge{position:fixed;right:12px;top:62px;z-index:15;background:#0b1220e6;border:1px solid var(--border);
+  border-radius:16px;padding:10px 14px;min-width:220px;box-shadow:0 10px 20px #0003;font-weight:700}
+.badge small{display:block;color:var(--muted);font-weight:600}
+
+.wrap{max-width:1100px;margin:18px auto;padding:0 14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:16px}
+.sel,.btn{font:inherit}
+.sel{width:100%;background:#0f1726;border:1px solid var(--border);color:#fff;border-radius:14px;padding:12px 14px}
+.btn{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--border);background:#0f1726;color:#fff}
+.label{font-size:13px;color:var(--muted);margin:8px 2px 6px}
+.grid{display:grid;gap:12px}
+@media(min-width:860px){.grid{grid-template-columns: 1fr 160px}}
+#tvBoxWrap{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#0f1726;min-height:300px}
+.tv-box{width:100%;height:520px}           /* desktop height */
+@media(max-width:600px){ .tv-box{height:440px} }  /* mobile height */
+.note{color:var(--muted);font-size:13px;margin-top:10px}
+</style>
+<script src="https://s3.tradingview.com/tv.js"></script>
 </head>
 <body>
-<header class="nav">
-  <a class="brand" href="index.html">JK Algo</a>
-  <nav class="tabs">
-    <a class="tab" href="index.html">Home</a>
-    <a class="tab active" href="market.html">Market</a>
-    <a class="tab" href="positions.html">Positions</a>
-  </nav>
-</header>
-
-<div id="capBadge" class="cap-badge">
-  <div><b>Capital:</b> <span id="capVal">$0</span></div>
-  <div class="muted small">PnL: <span id="pnlVal">--</span> • Margin: <span id="marginVal">--</span></div>
+<!-- NAV -->
+<div class="nav">
+  <div class="row">
+    <div class="brand">📈 JK Algo</div>
+    <div class="tabs">
+      <a class="tab" href="./">Home</a>
+      <a class="tab active" href="./market.html">Market</a>
+      <a class="tab" href="./positions.html">Positions</a>
+    </div>
+  </div>
 </div>
 
-<main class="wrap">
-  <section class="card">
-    <div class="card-head"><h2>Market</h2></div>
-    <div class="grid-3">
-      <label class="f"><span>Pair</span>
-        <select id="mPair">
-          <option value="BTCUSDT">BTC/USDT</option>
-          <option value="ETHUSDT">ETH/USDT</option>
-          <option value="SOLUSDT">SOL/USDT</option>
-          <option value="XRPUSDT">XRP/USDT</option>
+<!-- Capital badge (read-only here) -->
+<div class="badge">Capital: $<span id="capVal">1200.00</span>
+  <small>PnL: +$0.00 • Margin: $0.00</small>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <h3 style="margin:6px 0 12px">Market</h3>
+
+    <div class="grid">
+      <div>
+        <div class="label">Pair</div>
+        <select id="pairSel" class="sel">
+          <option value="BINANCE:BTCUSDT">BTC/USDT</option>
+          <option value="BINANCE:ETHUSDT">ETH/USDT</option>
+          <option value="BINANCE:SOLUSDT">SOL/USDT</option>
+          <option value="BINANCE:XRPUSDT">XRP/USDT</option>
+          <option value="TVC:GOLD">GOLD (XAU/USD)</option>
+          <option value="TVC:USOIL">USOIL</option>
         </select>
-      </label>
-      <label class="f"><span>Timeframe</span>
-        <select id="mTF">
-          <option value="1m">1m</option>
-          <option value="5m" selected>5m</option>
-          <option value="15m">15m</option>
-          <option value="1h">1h</option>
+
+        <div class="label">Timeframe</div>
+        <select id="tfSel" class="sel">
+          <option value="1">1m</option>
+          <option value="5" selected>5m</option>
+          <option value="15">15m</option>
+          <option value="60">1h</option>
+          <option value="240">4h</option>
         </select>
-      </label>
-      <div class="f"><span>&nbsp;</span><button id="mApply" class="btn">Reload</button></div>
+      </div>
+
+      <div style="align-self:end">
+        <button id="reloadBtn" class="btn">Reload</button>
+      </div>
     </div>
 
-    <div id="marketChart" class="tv big"></div>
-  </section>
-</main>
+    <div id="tvBoxWrap" style="margin-top:14px">
+      <div class="tv-box" id="tv_container_initial"></div>
+    </div>
 
-<script src="app.js"></script>
+    <div class="note">Agar chart blank aaye to “Reload” dabao (yeh naya container id se widget re-init karta hai).</div>
+  </div>
+</div>
+
+<script>
+function newContainerId(){
+  // recreate inner div with fresh id so TradingView widget properly re-inits
+  const wrap = document.getElementById('tvBoxWrap');
+  const id = 'tv_' + Date.now();
+  wrap.innerHTML = `<div class="tv-box" id="${id}"></div>`;
+  return id;
+}
+function renderTV(){
+  const symbol = document.getElementById('pairSel').value;
+  const tf     = document.getElementById('tfSel').value; // "1","5","15","60","240"
+  const cid    = newContainerId();
+
+  // Important: autosize + fixed parent height ensures visibility
+  new TradingView.widget({
+    autosize: true,
+    symbol: symbol,
+    interval: tf,
+    container_id: cid,
+    theme: "dark",
+    locale: "en",
+    hide_top_toolbar: true,
+    hide_legend: true,
+    allow_symbol_change: false,
+    drawings_access: { type: 'black', tools: [] },
+    studies: [] // keep clean on market page
+  });
+}
+document.getElementById('reloadBtn').addEventListener('click', renderTV);
+document.getElementById('pairSel').addEventListener('change', renderTV);
+document.getElementById('tfSel').addEventListener('change', renderTV);
+
+// First load
+renderTV();
+</script>
 </body>
 </html>

@@ -1,1 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>JK Algo — Market</title>
+<link rel="icon" href="icon.png"/><link rel="stylesheet" href="style.css"/>
+<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="index.html">JK Algo</a>
+  <nav class="tabs">
+    <a class="tab" href="index.html">Home</a>
+    <a class="tab active" href="market.html">Market</a>
+    <a class="tab" href="positions.html">Positions</a>
+  </nav>
+</header>
 
+<div id="capBadge" class="cap-badge">
+  <div><b>Capital:</b> <span id="capVal">$0</span></div>
+  <div class="muted small">PnL: <span id="pnlVal">--</span> • Margin: <span id="marginVal">--</span></div>
+</div>
+
+<main class="wrap">
+  <section class="card">
+    <div class="card-head"><h2>Market</h2></div>
+    <div class="grid-3">
+      <label class="f"><span>Pair</span>
+        <select id="mPair">
+          <option value="BTCUSDT">BTC/USDT</option>
+          <option value="ETHUSDT">ETH/USDT</option>
+          <option value="SOLUSDT">SOL/USDT</option>
+          <option value="XRPUSDT">XRP/USDT</option>
+        </select>
+      </label>
+      <label class="f"><span>Timeframe</span>
+        <select id="mTF">
+          <option value="1m">1m</option>
+          <option value="5m" selected>5m</option>
+          <option value="15m">15m</option>
+          <option value="1h">1h</option>
+        </select>
+      </label>
+      <div class="f"><span>&nbsp;</span><button id="mApply" class="btn">Reload</button></div>
+    </div>
+
+    <div id="marketChart" class="tv big"></div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

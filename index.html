@@ -6,7 +6,6 @@
 <title>JK Algo — Home</title>
 <link rel="icon" href="icon.png"/>
 <link rel="stylesheet" href="style.css"/>
-<!-- Lightweight Charts -->
 <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
 </head>
 <body>
@@ -19,12 +18,10 @@
   </nav>
 </header>
 
-<!-- floating capital badge (top-left) -->
+<!-- compact, top-right; no overlap with navbar -->
 <div id="capBadge" class="cap-badge">
   <div><b>Capital:</b> <span id="capVal">$0</span></div>
-  <div class="muted small">
-    PnL: <span id="pnlVal">--</span> • Margin: <span id="marginVal">--</span>
-  </div>
+  <div class="muted small">PnL: <span id="pnlVal">--</span> • Margin: <span id="marginVal">--</span></div>
 </div>
 
 <main class="wrap">
@@ -53,16 +50,40 @@
         </select>
       </label>
 
-      <label class="f"><span>Leverage (max 2000)</span>
-        <input id="levInp" type="number" min="1" max="2000" value="100">
+      <label class="f"><span>Leverage (1–2000)</span>
+        <input id="levRange" type="range" min="1" max="2000" value="100" />
+        <div class="row">
+          <input id="levInp" type="number" min="1" max="2000" value="100">
+        </div>
       </label>
 
-      <label class="f"><span>Trade Size (USDT)</span>
+      <label class="f"><span>Order Size Mode</span>
+        <div class="row">
+          <label class="chip"><input type="radio" name="sizemode" value="USDT" checked> USDT</label>
+          <label class="chip"><input type="radio" name="sizemode" value="LOT"> Lot (qty)</label>
+        </div>
+      </label>
+
+      <label class="f" id="sizeUSDTWrap"><span>Trade Size (USDT)</span>
         <input id="sizeUSDT" type="number" min="5" step="5" value="100">
       </label>
 
+      <label class="f hide" id="lotWrap"><span>Lot Size (Qty)</span>
+        <div class="step">
+          <button class="sbtn" id="lotMinus">−</button>
+          <input id="lotQty" type="number" step="0.01" min="0.01" value="0.10">
+          <button class="sbtn" id="lotPlus">+</button>
+        </div>
+        <span class="muted small">Exness style: 0.01 / 0.10 / 1.00 ...</span>
+      </label>
+
       <label class="f"><span>Start Capital (USDT)</span>
-        <input id="capInp" type="number" min="50" step="10" value="1000">
+        <div class="step">
+          <button class="sbtn" id="capMinus">−</button>
+          <input id="capInp" type="number" min="50" step="10" value="1000">
+          <button class="sbtn" id="capPlus">+</button>
+        </div>
+        <div class="row"><button class="btn" id="saveCap">Save Capital</button></div>
       </label>
 
       <label class="f"><span>&nbsp;</span>
@@ -102,14 +123,13 @@
       </div>
     </div>
 
-    <!-- CHART -->
     <div class="chart-stack">
       <div id="priceChart" class="tv"></div>
       <div id="rsiChart" class="tv small"></div>
       <div id="macdChart" class="tv small hide"></div>
     </div>
 
-    <p class="muted small">Demo only: Binance klines, Lightweight-Charts rendering, localStorage state. Entries/exits mark होंगे; capital/PnL ऊपर left में live update होगा.</p>
+    <p class="muted small">Demo only • Binance klines • Local storage state • Entries/Exits mark होंगे.</p>
   </section>
 </main>
 

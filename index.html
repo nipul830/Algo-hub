@@ -1,138 +1,236 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>JK Algo — Home</title>
-<link rel="icon" href="icon.png"/>
-<link rel="stylesheet" href="style.css"/>
-<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1420; --card:#121a27; --muted:#9fb0c3; --text:#e8f0ff;
+  --accent:#3aa0ff; --accent2:#00d084; --red:#d44; --border:#1e2a3d;
+}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial}
+a{color:inherit;text-decoration:none}
+
+.nav{position:sticky;top:0;z-index:20;background:#0e1521cc;backdrop-filter:blur(6px);border-bottom:1px solid var(--border)}
+.nav .row{max-width:1100px;margin:auto;display:flex;align-items:center;gap:14px;padding:10px 14px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700}
+.tabs{margin-left:auto;display:flex;gap:8px}
+.tab{padding:10px 14px;border-radius:12px;color:#cfe0ff}
+.tab.active{background:var(--card);color:#fff;box-shadow:inset 0 -2px 0 0 var(--accent)}
+
+.badge{position:fixed;left:12px;top:62px;z-index:15;background:#0b1220e6;border:1px solid var(--border);
+  border-radius:16px;padding:10px 14px;min-width:210px;box-shadow:0 10px 20px #0003;font-weight:700}
+.badge small{display:block;color:var(--muted);font-weight:600}
+
+.wrap{max-width:1100px;margin:18px auto;padding:0 14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:16px}
+
+.grid{display:grid;gap:14px}
+@media(min-width:900px){.grid{grid-template-columns: 340px 1fr}}
+
+.label{font-size:13px;color:var(--muted);margin:6px 2px 6px}
+select,input,button{font:inherit}
+.sel, .inp, .range-out{
+  width:100%;background:#0f1726;border:1px solid var(--border);color:#fff;
+  border-radius:14px;padding:12px 14px;outline:none
+}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{padding:11px 16px;border-radius:12px;border:1px solid var(--border);background:#0f1726;color:#fff}
+.btn.green{background:#0c3; border-color:#0c3}
+.btn.red{background:#b22; border-color:#b22}
+.btn.ghost{background:#0f172600}
+.chk{display:inline-flex;align-items:center;gap:8px;margin:8px 12px 8px 0;color:#cfe0ff}
+
+.stepper{display:flex;align-items:center;gap:8px}
+.stepper input{width:120px;text-align:center}
+.stepper .btn{padding:10px 14px}
+
+#tvWrap{border-radius:16px;border:1px solid var(--border);overflow:hidden;background:#0f1726}
+#tvWrap .loading{padding:18px;color:var(--muted)}
+/* **CRITICAL**: chart height */
+.tv-box{width:100%;height:460px}            /* desktop */
+@media(max-width:600px){ .tv-box{height:420px} }  /* mobile */
+
+.muted{color:var(--muted);font-size:13px}
+</style>
+<!-- TradingView library -->
+<script src="https://s3.tradingview.com/tv.js"></script>
 </head>
 <body>
-<header class="nav">
-  <a class="brand" href="index.html">JK Algo</a>
-  <nav class="tabs">
-    <a class="tab active" href="index.html">Home</a>
-    <a class="tab" href="market.html">Market</a>
-    <a class="tab" href="positions.html">Positions</a>
-  </nav>
-</header>
 
-<!-- compact, top-right; no overlap with navbar -->
-<div id="capBadge" class="cap-badge">
-  <div><b>Capital:</b> <span id="capVal">$0</span></div>
-  <div class="muted small">PnL: <span id="pnlVal">--</span> • Margin: <span id="marginVal">--</span></div>
+<!-- NAV -->
+<div class="nav">
+  <div class="row">
+    <div class="brand">📈 JK Algo</div>
+    <div class="tabs">
+      <a class="tab active" href="./">Home</a>
+      <a class="tab" href="./market.html">Market</a>
+      <a class="tab" href="./positions.html">Positions</a>
+    </div>
+  </div>
 </div>
 
-<main class="wrap">
-  <section class="card">
-    <div class="card-head">
-      <h2>Algo Setup</h2>
-      <span id="algoState" class="badge red">Stopped</span>
-    </div>
+<!-- Capital badge (resized, no overlap) -->
+<div class="badge" id="capBadge">
+  Capital: $<span id="capVal">1000.00</span>
+  <small>PnL: $<span id="pnlVal">0.00</span> • Margin: $<span id="mgnVal">0.00</span></small>
+</div>
 
-    <div class="grid-3">
-      <label class="f"><span>Pair</span>
-        <select id="pairSel">
-          <option value="BTCUSDT">BTC/USDT</option>
-          <option value="ETHUSDT">ETH/USDT</option>
-          <option value="SOLUSDT">SOL/USDT</option>
-          <option value="XRPUSDT">XRP/USDT</option>
-        </select>
-      </label>
+<div class="wrap">
+  <div class="grid">
+    <!-- LEFT: Setup -->
+    <div class="card">
+      <h3 style="margin:6px 0 8px">Algo Setup</h3>
 
-      <label class="f"><span>Timeframe</span>
-        <select id="tfSel">
-          <option value="1m">1m</option>
-          <option value="5m" selected>5m</option>
-          <option value="15m">15m</option>
-          <option value="1h">1h</option>
-        </select>
-      </label>
+      <div class="label">Pair</div>
+      <select class="sel" id="pairSel">
+        <option value="BINANCE:BTCUSDT">BTC/USDT</option>
+        <option value="BINANCE:ETHUSDT">ETH/USDT</option>
+        <option value="BINANCE:SOLUSDT">SOL/USDT</option>
+        <option value="BINANCE:XRPUSDT">XRP/USDT</option>
+        <option value="TVC:GOLD">GOLD (XAU/USD)</option>
+        <option value="TVC:USOIL">USOIL</option>
+      </select>
 
-      <label class="f"><span>Leverage (1–2000)</span>
-        <input id="levRange" type="range" min="1" max="2000" value="100" />
-        <div class="row">
-          <input id="levInp" type="number" min="1" max="2000" value="100">
+      <div class="row2">
+        <div>
+          <div class="label">Timeframe</div>
+          <select class="sel" id="tfSel">
+            <option value="1">1m</option>
+            <option value="5" selected>5m</option>
+            <option value="15">15m</option>
+            <option value="60">1h</option>
+            <option value="240">4h</option>
+          </select>
         </div>
-      </label>
-
-      <label class="f"><span>Order Size Mode</span>
-        <div class="row">
-          <label class="chip"><input type="radio" name="sizemode" value="USDT" checked> USDT</label>
-          <label class="chip"><input type="radio" name="sizemode" value="LOT"> Lot (qty)</label>
-        </div>
-      </label>
-
-      <label class="f" id="sizeUSDTWrap"><span>Trade Size (USDT)</span>
-        <input id="sizeUSDT" type="number" min="5" step="5" value="100">
-      </label>
-
-      <label class="f hide" id="lotWrap"><span>Lot Size (Qty)</span>
-        <div class="step">
-          <button class="sbtn" id="lotMinus">−</button>
-          <input id="lotQty" type="number" step="0.01" min="0.01" value="0.10">
-          <button class="sbtn" id="lotPlus">+</button>
-        </div>
-        <span class="muted small">Exness style: 0.01 / 0.10 / 1.00 ...</span>
-      </label>
-
-      <label class="f"><span>Start Capital (USDT)</span>
-        <div class="step">
-          <button class="sbtn" id="capMinus">−</button>
-          <input id="capInp" type="number" min="50" step="10" value="1000">
-          <button class="sbtn" id="capPlus">+</button>
-        </div>
-        <div class="row"><button class="btn" id="saveCap">Save Capital</button></div>
-      </label>
-
-      <label class="f"><span>&nbsp;</span>
-        <div class="row">
-          <button id="btnStart" class="btn green">Start</button>
-          <button id="btnStop" class="btn red">Stop</button>
-          <button id="btnReset" class="btn ghost">Reset</button>
-        </div>
-      </label>
-    </div>
-
-    <div class="grid-3">
-      <label class="f"><span>Strategy</span>
-        <select id="stratSel">
-          <option value="ema_cross">EMA Cross (12/26)</option>
-          <option value="rsi_macd">RSI(14) + MACD(12,26,9)</option>
-          <option value="bb_bounce">Bollinger Bounce (20,2)</option>
-          <option value="pivot_break">Pivot Break (Classic R1/S1)</option>
-          <option value="macd_cross">MACD Cross</option>
-        </select>
-      </label>
-
-      <div class="f"><span>Indicators (show)</span>
-        <div class="chips">
-          <label class="chip"><input type="checkbox" id="indEMA" checked> EMA</label>
-          <label class="chip"><input type="checkbox" id="indBB" checked> Bollinger</label>
-          <label class="chip"><input type="checkbox" id="indRSI" checked> RSI</label>
-          <label class="chip"><input type="checkbox" id="indPiv" checked> Pivots</label>
-          <label class="chip"><input type="checkbox" id="indMACD"> MACD</label>
+        <div>
+          <div class="label">Leverage <span class="muted">(max 2000)</span></div>
+          <div class="stepper">
+            <input class="inp" type="range" id="levRange" min="1" max="2000" value="100" oninput="levOut.textContent=this.value">
+            <div class="range-out">x<span id="levOut">100</span></div>
+          </div>
         </div>
       </div>
 
-      <div class="f"><span>&nbsp;</span>
-        <div class="row">
-          <button id="btnApply" class="btn">Apply to Chart</button>
+      <div class="row2" style="margin-top:8px">
+        <div>
+          <div class="label">Lot Size</div>
+          <div class="stepper">
+            <button class="btn" onclick="stepLot(-0.01)">−</button>
+            <input class="inp" id="lotSize" type="number" step="0.01" min="0.01" value="0.10">
+            <button class="btn" onclick="stepLot(0.01)">+</button>
+          </div>
+          <div class="muted" style="margin-top:6px">Step 0.01 (e.g. 0.01, 0.10, 0.25…)</div>
         </div>
+        <div>
+          <div class="label">Start Capital (USDT)</div>
+          <input class="inp" id="startCap" type="number" value="1000">
+        </div>
+      </div>
+
+      <div class="btns" style="margin-top:12px">
+        <button class="btn green" onclick="startAlgo()">Start</button>
+        <button class="btn red" onclick="stopAlgo()">Stop</button>
+        <button class="btn ghost" onclick="resetSim()">Reset</button>
+      </div>
+
+      <div class="label" style="margin-top:14px">Strategy</div>
+      <select class="sel" id="stratSel">
+        <option value="ema">EMA Cross (12/26)</option>
+        <option value="bb">Bollinger Basic</option>
+        <option value="rsi">RSI Bounce</option>
+        <option value="piv">Pivot Levels</option>
+        <option value="macd">MACD</option>
+      </select>
+
+      <div class="label" style="margin-top:10px">Indicators (show)</div>
+      <label class="chk"><input type="checkbox" id="iEMA" checked> EMA</label>
+      <label class="chk"><input type="checkbox" id="iBB"  checked> Bollinger</label>
+      <label class="chk"><input type="checkbox" id="iRSI" checked> RSI</label>
+      <label class="chk"><input type="checkbox" id="iPIV" checked> Pivots</label>
+      <label class="chk"><input type="checkbox" id="iMACD"> MACD</label>
+
+      <div class="btns" style="margin-top:10px">
+        <button class="btn" onclick="applyToChart()">Apply to Chart</button>
       </div>
     </div>
 
-    <div class="chart-stack">
-      <div id="priceChart" class="tv"></div>
-      <div id="rsiChart" class="tv small"></div>
-      <div id="macdChart" class="tv small hide"></div>
+    <!-- RIGHT: Chart -->
+    <div class="card">
+      <h3 style="margin:6px 0 8px">Chart</h3>
+      <div id="tvWrap">
+        <div class="loading">Loading chart…</div>
+      </div>
+      <div class="muted" style="margin-top:10px">Tip: Indicators choose karke “Apply to Chart” dabao.</div>
     </div>
+  </div>
+</div>
 
-    <p class="muted small">Demo only • Binance klines • Local storage state • Entries/Exits mark होंगे.</p>
-  </section>
-</main>
+<script>
+const badge = {
+  cap: document.getElementById('capVal'),
+  pnl: document.getElementById('pnlVal'),
+  mgn: document.getElementById('mgnVal'),
+};
+function syncBadge(){
+  badge.cap.textContent = (+document.getElementById('startCap').value || 0).toFixed(2);
+}
 
-<script src="app.js"></script>
+function stepLot(d){
+  const el = document.getElementById('lotSize');
+  const v = Math.max(0.01, (+el.value||0) + d);
+  el.value = v.toFixed(2);
+}
+
+function studiesFromChecks(){
+  const s = [];
+  if (document.getElementById('iEMA').checked)  s.push("MAExp@tv-basicstudies");
+  if (document.getElementById('iBB').checked)   s.push("BollingerBands@tv-basicstudies");
+  if (document.getElementById('iRSI').checked)  s.push("RSI@tv-basicstudies");
+  if (document.getElementById('iPIV').checked)  s.push("PivotPointsStandard@tv-basicstudies");
+  if (document.getElementById('iMACD').checked) s.push("MACD@tv-basicstudies");
+  return s;
+}
+
+function tvContainerReset(){
+  const wrap = document.getElementById('tvWrap');
+  wrap.innerHTML = '<div id="tv_'+Date.now()+'" class="tv-box"></div>';
+  return wrap.firstChild.id;
+}
+
+function renderTV(){
+  const sym = document.getElementById('pairSel').value;
+  const tf  = document.getElementById('tfSel').value;   // "1","5","15","60","240"
+  const studies = studiesFromChecks();
+  const cid = tvContainerReset();
+
+  new TradingView.widget({
+    autosize: true,
+    symbol: sym,
+    interval: tf,
+    container_id: cid,
+    theme: "dark",
+    locale: "en",
+    hide_top_toolbar: true,
+    hide_legend: true,
+    allow_symbol_change: false,
+    studies: studies,
+    drawings_access: { type: 'black', tools: [ ] },
+  });
+}
+
+function applyToChart(){ renderTV(); }
+function startAlgo(){ alert("Demo: Start pressed"); }
+function stopAlgo(){ alert("Demo: Stop pressed"); }
+function resetSim(){ document.getElementById('startCap').value = 1000; syncBadge(); }
+
+document.getElementById('startCap').addEventListener('input', syncBadge);
+syncBadge();
+renderTV(); // first load
+</script>
 </body>
-</html>
+  </html>

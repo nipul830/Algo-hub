@@ -29,18 +29,27 @@ a{color:inherit;text-decoration:none}
 select,input{background:#0e1624;border:1px solid #1b2b44;color:#e6edf3;border-radius:12px;padding:12px 14px;outline:none}
 select:focus,input:focus{border-color:#2f8bff}
 
-.row{display:flex;gap:8px;flex-wrap:wrap}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .btn{background:#182338;border:1px solid #233450;color:#d9e8ff;border-radius:12px;padding:10px 14px;font-weight:700}
 .btn.ghost{background:transparent}
 .btn.green{background:#143628;border-color:#1f5a44}
 .btn.red{background:#3a1820;border-color:#5a2a34}
+
+.step{display:flex;align-items:center;gap:8px}
+.step input{max-width:140px;text-align:center}
+.step .sbtn{width:40px;height:42px;border-radius:10px;border:1px solid #24364f;background:#131f33;color:#cfe1ff;font-weight:900}
 
 .chart-stack{border:1px solid #15263c;border-radius:14px;overflow:hidden;background:#0f1724}
 .tv{height:420px} .tv.small{height:140px;border-top:1px solid #15263c}
 .tv.big{height:620px}
 .hide{display:none}
 
-.cap-badge{position:fixed;top:10px;left:10px;z-index:30;background:#0f1a2a;border:1px solid #1b2a40;border-radius:12px;padding:8px 10px;box-shadow:0 4px 18px #00000055}
+/* Capital badge – top-right & compact */
+.cap-badge{
+  position:fixed; top:66px; right:10px; z-index:30;
+  background:#0f1a2a; border:1px solid #1b2a40; border-radius:12px;
+  padding:8px 10px; box-shadow:0 4px 18px #00000055; min-width:180px;
+}
 .cap-badge .muted{font-size:11px}
 
 .stat{background:#0f1724;border:1px solid #15263c;border-radius:12px;padding:10px}

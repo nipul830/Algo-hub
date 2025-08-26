@@ -1,1 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>JK Algo — Positions</title>
+<link rel="icon" href="icon.png"/><link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="index.html">JK Algo</a>
+  <nav class="tabs">
+    <a class="tab" href="index.html">Home</a>
+    <a class="tab" href="market.html">Market</a>
+    <a class="tab active" href="positions.html">Positions</a>
+  </nav>
+</header>
 
+<div id="capBadge" class="cap-badge">
+  <div><b>Capital:</b> <span id="capVal">$0</span></div>
+  <div class="muted small">PnL: <span id="pnlVal">--</span> • Margin: <span id="marginVal">--</span></div>
+</div>
+
+<main class="wrap">
+  <section class="card">
+    <div class="card-head"><h2>Positions</h2></div>
+
+    <div class="grid-3">
+      <div class="stat"><div class="k">Capital</div><div class="v" id="stCap">—</div></div>
+      <div class="stat"><div class="k">Floating PnL</div><div class="v" id="stFloat">—</div></div>
+      <div class="stat"><div class="k">Margin Used</div><div class="v" id="stMargin">—</div></div>
+    </div>
+
+    <h3>Open</h3>
+    <table class="tbl" id="tblOpen">
+      <thead><tr><th>Time</th><th>Pair</th><th>Side</th><th>Qty</th><th>Entry</th><th>Mark</th><th>Leverage</th><th>Margin</th><th>uPnL</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <h3>Closed</h3>
+    <table class="tbl" id="tblClosed">
+      <thead><tr><th>Time</th><th>Pair</th><th>Side</th><th>Qty</th><th>Entry</th><th>Exit</th><th>PnL</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

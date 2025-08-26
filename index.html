@@ -1,1 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>JK Algo — Home</title>
+<link rel="icon" href="icon.png"/>
+<link rel="stylesheet" href="style.css"/>
+<!-- Lightweight Charts -->
+<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="index.html">JK Algo</a>
+  <nav class="tabs">
+    <a class="tab active" href="index.html">Home</a>
+    <a class="tab" href="market.html">Market</a>
+    <a class="tab" href="positions.html">Positions</a>
+  </nav>
+</header>
 
+<!-- floating capital badge (top-left) -->
+<div id="capBadge" class="cap-badge">
+  <div><b>Capital:</b> <span id="capVal">$0</span></div>
+  <div class="muted small">
+    PnL: <span id="pnlVal">--</span> • Margin: <span id="marginVal">--</span>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="card">
+    <div class="card-head">
+      <h2>Algo Setup</h2>
+      <span id="algoState" class="badge red">Stopped</span>
+    </div>
+
+    <div class="grid-3">
+      <label class="f"><span>Pair</span>
+        <select id="pairSel">
+          <option value="BTCUSDT">BTC/USDT</option>
+          <option value="ETHUSDT">ETH/USDT</option>
+          <option value="SOLUSDT">SOL/USDT</option>
+          <option value="XRPUSDT">XRP/USDT</option>
+        </select>
+      </label>
+
+      <label class="f"><span>Timeframe</span>
+        <select id="tfSel">
+          <option value="1m">1m</option>
+          <option value="5m" selected>5m</option>
+          <option value="15m">15m</option>
+          <option value="1h">1h</option>
+        </select>
+      </label>
+
+      <label class="f"><span>Leverage (max 2000)</span>
+        <input id="levInp" type="number" min="1" max="2000" value="100">
+      </label>
+
+      <label class="f"><span>Trade Size (USDT)</span>
+        <input id="sizeUSDT" type="number" min="5" step="5" value="100">
+      </label>
+
+      <label class="f"><span>Start Capital (USDT)</span>
+        <input id="capInp" type="number" min="50" step="10" value="1000">
+      </label>
+
+      <label class="f"><span>&nbsp;</span>
+        <div class="row">
+          <button id="btnStart" class="btn green">Start</button>
+          <button id="btnStop" class="btn red">Stop</button>
+          <button id="btnReset" class="btn ghost">Reset</button>
+        </div>
+      </label>
+    </div>
+
+    <div class="grid-3">
+      <label class="f"><span>Strategy</span>
+        <select id="stratSel">
+          <option value="ema_cross">EMA Cross (12/26)</option>
+          <option value="rsi_macd">RSI(14) + MACD(12,26,9)</option>
+          <option value="bb_bounce">Bollinger Bounce (20,2)</option>
+          <option value="pivot_break">Pivot Break (Classic R1/S1)</option>
+          <option value="macd_cross">MACD Cross</option>
+        </select>
+      </label>
+
+      <div class="f"><span>Indicators (show)</span>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" id="indEMA" checked> EMA</label>
+          <label class="chip"><input type="checkbox" id="indBB" checked> Bollinger</label>
+          <label class="chip"><input type="checkbox" id="indRSI" checked> RSI</label>
+          <label class="chip"><input type="checkbox" id="indPiv" checked> Pivots</label>
+          <label class="chip"><input type="checkbox" id="indMACD"> MACD</label>
+        </div>
+      </div>
+
+      <div class="f"><span>&nbsp;</span>
+        <div class="row">
+          <button id="btnApply" class="btn">Apply to Chart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="chart-stack">
+      <div id="priceChart" class="tv"></div>
+      <div id="rsiChart" class="tv small"></div>
+      <div id="macdChart" class="tv small hide"></div>
+    </div>
+
+    <p class="muted small">Demo only: Binance klines, Lightweight-Charts rendering, localStorage state. Entries/exits mark होंगे; capital/PnL ऊपर left में live update होगा.</p>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

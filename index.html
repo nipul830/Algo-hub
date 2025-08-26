@@ -6,13 +6,9 @@
 <title>JK Algo</title>
 <link rel="preconnect" href="https://s3.tradingview.com">
 <style>
-  :root{
-    --bg:#0b1220;--panel:#0f1726;--muted:#9fb0c3;--border:#27334a;--text:#e8f0ff;
-    --accent:#1763ff;--accent2:#1e90ff;--danger:#b72a2a;--ok:#1f7a3d;
-  }
+  :root{--bg:#0b1220;--panel:#0f1726;--muted:#9fb0c3;--border:#27334a;--text:#e8f0ff;--accent:#1763ff;}
   *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
   .wrap{max-width:980px;margin:0 auto;padding:14px}
-  /* NAV */
   .nav{position:sticky;top:0;z-index:50;background:rgba(11,18,32,.85);backdrop-filter:blur(6px);border-bottom:1px solid var(--border)}
   .nav-in{display:flex;align-items:center;gap:10px;padding:10px 14px}
   .brand{display:flex;align-items:center;gap:10px;font-weight:700}
@@ -20,11 +16,8 @@
   .tabs{margin-left:auto;display:flex;gap:8px}
   .tab{padding:10px 14px;border:1px solid var(--border);border-radius:12px;background:#0e1729;color:#cfe2ff;cursor:pointer}
   .tab.active{background:#142138;border-color:#2d4771;color:#fff;box-shadow:inset 0 0 0 1px #284f8a}
-  /* Capital pill */
   .capital{position:fixed;right:10px;top:64px;z-index:40;background:#0e1729;border:1px solid var(--border);border-radius:14px;padding:10px 12px;min-width:200px}
-  .capital b{font-size:15px}
-  .muted{color:var(--muted);font-size:12px}
-  /* Blocks */
+  .capital b{font-size:15px}.muted{color:var(--muted);font-size:12px}
   .box{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;margin:16px 0}
   .box h2{margin:0 0 12px}
   .grid2{display:grid;gap:12px}
@@ -39,16 +32,13 @@
   .btn.stop{background:#3a1520;border-color:#6a2737}
   .btn.alt{background:#11233f;border-color:#1e3f73}
   .note{color:var(--muted);font-size:12px;margin-top:8px}
-  /* Indicators boxed */
   .indi-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
   @media(min-width:520px){.indi-wrap{grid-template-columns:repeat(3,minmax(0,1fr))}}
   .chk{display:flex;align-items:center;gap:10px;background:#0b1220;border:1px solid var(--border);border-radius:12px;padding:10px 12px}
   .actions{display:flex;gap:10px;margin-top:12px}
-  /* Chart area */
   .tv-wrap{margin-top:12px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
   .tv-chart{width:100%;height:520px}
   @media(max-width:420px){.tv-chart{height:480px}}
-  /* Positions list */
   .seg{display:flex;gap:8px;margin-bottom:10px}
   .seg button{flex:1}
   .list .rowp{display:grid;grid-template-columns:1.1fr .6fr .6fr .6fr;gap:10px;padding:10px;border-bottom:1px solid var(--border)}
@@ -56,8 +46,6 @@
 </style>
 </head>
 <body>
-
-<!-- NAV -->
 <div class="nav">
   <div class="nav-in wrap">
     <div class="brand"><div class="logo"></div> JK Algo</div>
@@ -69,64 +57,44 @@
   </div>
 </div>
 
-<!-- CAPITAL -->
 <div class="capital" id="capCard">
   <div><b>Capital:</b> <span id="capVal">$1000.00</span></div>
   <div class="muted" id="capPnL">PnL: +$0.00 • Margin: $0.00</div>
 </div>
 
 <div class="wrap">
-
-  <!-- HOME -->
   <section id="home" class="page">
     <div class="box">
       <h2>JK ALGO Setup</h2>
       <div class="grid2">
-        <div class="field">
-          <div class="label">Pair</div>
+        <div class="field"><div class="label">Pair</div>
           <select id="pairSel" class="sel">
-            <option>BTC/USDT</option>
-            <option>ETH/USDT</option>
-            <option>SOL/USDT</option>
-            <option>XRP/USDT</option>
-            <option>GOLD (XAU/USD)</option>
-            <option>USOIL (WTI)</option>
+            <option>BTC/USDT</option><option>ETH/USDT</option><option>SOL/USDT</option>
+            <option>XRP/USDT</option><option>GOLD (XAU/USD)</option><option>USOIL (WTI)</option>
           </select>
         </div>
-        <div class="field">
-          <div class="label">Timeframe</div>
+        <div class="field"><div class="label">Timeframe</div>
           <select id="tfSel" class="sel">
-            <option value="1">1m</option>
-            <option value="5" selected>5m</option>
-            <option value="15">15m</option>
-            <option value="60">1h</option>
-            <option value="240">4h</option>
+            <option value="1">1m</option><option value="5" selected>5m</option>
+            <option value="15">15m</option><option value="60">1h</option><option value="240">4h</option>
           </select>
         </div>
-        <div class="field">
-          <div class="label">Leverage (max 2000)</div>
+        <div class="field"><div class="label">Leverage (max 2000)</div>
           <div class="row">
             <input id="levRange" type="range" min="1" max="2000" value="100" style="flex:1"/>
             <input id="levShow" class="inp" style="width:110px;text-align:center" value="100x"/>
           </div>
         </div>
-        <div class="field">
-          <div class="label">Lot size</div>
+        <div class="field"><div class="label">Lot size</div>
           <div class="row">
             <button class="btn" id="lotMinus">−</button>
             <input id="lotInp" class="inp" value="0.10" style="text-align:center"/>
             <button class="btn" id="lotPlus">+</button>
           </div>
-          <div class="note">Step 0.01 (Exness‑style)</div>
+          <div class="note">Step 0.01 (Exness-style)</div>
         </div>
-        <div class="field">
-          <div class="label">Trade size (USDT)</div>
-          <input id="tradeSize" class="inp" value="100"/>
-        </div>
-        <div class="field">
-          <div class="label">Start Capital (USDT)</div>
-          <input id="startCapital" class="inp" value="1000"/>
-        </div>
+        <div class="field"><div class="label">Trade size (USDT)</div><input id="tradeSize" class="inp" value="100"/></div>
+        <div class="field"><div class="label">Start Capital (USDT)</div><input id="startCapital" class="inp" value="1000"/></div>
       </div>
       <div class="row" style="margin-top:10px">
         <button class="btn ok" id="startBtn">Start</button>
@@ -136,12 +104,10 @@
       <div class="note">Frontend demo only — signals/chart only. Real trading नहीं।</div>
     </div>
 
-    <!-- Strategies + Indicators (persistent) -->
     <div class="box">
       <h2>Strategies</h2>
       <div class="grid2">
-        <div class="field">
-          <div class="label">Strategy A</div>
+        <div class="field"><div class="label">Strategy A</div>
           <select id="strategyA" class="sel">
             <option value="emaCross">EMA Cross (12/26)</option>
             <option value="rsiOBOS">RSI Overbought/Oversold</option>
@@ -150,8 +116,7 @@
             <option value="pivotReversal">Pivot Reversal</option>
           </select>
         </div>
-        <div class="field">
-          <div class="label">Strategy B</div>
+        <div class="field"><div class="label">Strategy B</div>
           <select id="strategyB" class="sel">
             <option value="none">None</option>
             <option value="emaCross">EMA Cross (12/26)</option>
@@ -177,28 +142,21 @@
       </div>
       <div class="note">Selections localStorage में save—refresh/tab change पर भी same रहेंगे.</div>
 
-      <!-- Chart -->
-      <div class="tv-wrap">
-        <div id="tvChart" class="tv-chart"></div>
-      </div>
+      <div class="tv-wrap"><div id="tvChart" class="tv-chart"></div></div>
     </div>
   </section>
 
-  <!-- MARKET -->
   <section id="market" class="page" style="display:none">
     <div class="box">
       <h2>Market</h2>
       <div class="grid2">
-        <div class="field">
-          <div class="label">Pair</div>
+        <div class="field"><div class="label">Pair</div>
           <select id="mPair" class="sel">
-            <option>BTC/USDT</option><option>ETH/USDT</option>
-            <option>SOL/USDT</option><option>XRP/USDT</option>
-            <option>GOLD (XAU/USD)</option><option>USOIL (WTI)</option>
+            <option>BTC/USDT</option><option>ETH/USDT</option><option>SOL/USDT</option>
+            <option>XRP/USDT</option><option>GOLD (XAU/USD)</option><option>USOIL (WTI)</option>
           </select>
         </div>
-        <div class="field">
-          <div class="label">Timeframe</div>
+        <div class="field"><div class="label">Timeframe</div>
           <select id="mTf" class="sel">
             <option value="1">1m</option><option value="5" selected>5m</option>
             <option value="15">15m</option><option value="60">1h</option>
@@ -210,7 +168,6 @@
     </div>
   </section>
 
-  <!-- POSITIONS -->
   <section id="positions" class="page" style="display:none">
     <div class="box">
       <h2>Positions (demo)</h2>
@@ -225,23 +182,21 @@
       <div class="note">Algo start होने पर यहां demo entries दिखेंगे (local only).</div>
     </div>
   </section>
-
 </div>
 
-<!-- TradingView lightweight-charts embed -->
 <script src="https://s3.tradingview.com/tv.js"></script>
 <script>
-/* ---------- Helpers ---------- */
-const $ = sel => document.querySelector(sel);
-const byId = id => document.getElementById(id);
+/* ===== Helpers (NO conflicts) ===== */
+const qs  = sel => document.querySelector(sel);
+const gid = id  => document.getElementById(id);
 const store = {
   get:(k,def)=>{ try{const v=localStorage.getItem(k); return v?JSON.parse(v):def;}catch{ return def; } },
   set:(k,v)=>localStorage.setItem(k,JSON.stringify(v)),
   del:k=>localStorage.removeItem(k)
 };
 
-/* ---------- Nav ---------- */
-const pages = {home:byId('home'), market:byId('market'), positions:byId('positions')};
+/* ===== Nav ===== */
+const pages = {home:gid('home'), market:gid('market'), positions:gid('positions')};
 document.querySelectorAll('.tab').forEach(t=>{
   t.addEventListener('click',()=>{
     document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
@@ -251,16 +206,16 @@ document.querySelectorAll('.tab').forEach(t=>{
   });
 });
 
-/* ---------- Capital ---------- */
+/* ===== Capital ===== */
 const capKey='jk_capital_v1';
 let capital = store.get(capKey,{balance:1000,pnl:0,margin:0});
 function paintCapital(){
-  byId('capVal').textContent = `$${capital.balance.toFixed(2)}`;
-  byId('capPnL').textContent = `PnL: ${capital.pnl>=0?'+':''}$${capital.pnl.toFixed(2)} • Margin: $${capital.margin.toFixed(2)}`;
+  gid('capVal').textContent = `$${capital.balance.toFixed(2)}`;
+  gid('capPnL').textContent = `PnL: ${capital.pnl>=0?'+':''}$${capital.pnl.toFixed(2)} • Margin: $${capital.margin.toFixed(2)}`;
 }
 paintCapital();
 
-/* ---------- Inputs + persistence ---------- */
+/* ===== Prefs ===== */
 const prefKey='jk_prefs_v1';
 const defPrefs={
   pair:'BTC/USDT', tf:'5', lev:100, lot:0.10, size:100,
@@ -269,91 +224,77 @@ const defPrefs={
 };
 let prefs = Object.assign({}, defPrefs, store.get(prefKey,{}));
 
-function $(id){return document.getElementById(id)}
-$('pairSel').value=prefs.pair; $('tfSel').value=prefs.tf;
-$('levRange').value=prefs.lev; $('levShow').value=prefs.lev+'x';
-$('lotInp').value=prefs.lot.toFixed(2); $('tradeSize').value=prefs.size;
-$('startCapital').value=capital.balance;
-$('strategyA').value=prefs.stratA; $('strategyB').value=prefs.stratB;
-['indEma','indBb','indRsi','indPivots','indMacd'].forEach(k=>$(k).checked=!!prefs.ind[k]);
+gid('pairSel').value=prefs.pair; gid('tfSel').value=prefs.tf;
+gid('levRange').value=prefs.lev; gid('levShow').value=prefs.lev+'x';
+gid('lotInp').value=prefs.lot.toFixed(2); gid('tradeSize').value=prefs.size;
+gid('startCapital').value=capital.balance;
+gid('strategyA').value=prefs.stratA; gid('strategyB').value=prefs.stratB;
+['indEma','indBb','indRsi','indPivots','indMacd'].forEach(k=>gid(k).checked=!!prefs.ind[k]);
+const savePrefs=()=>store.set(prefKey,prefs);
 
-function savePrefs(){ store.set(prefKey,prefs); }
-
-/* Leverage link */
-$('levRange').addEventListener('input', e=>{
-  prefs.lev = +e.target.value; $('levShow').value=prefs.lev+'x'; savePrefs();
+/* Leverage */
+gid('levRange').addEventListener('input', e=>{
+  prefs.lev=+e.target.value; gid('levShow').value=prefs.lev+'x'; savePrefs();
 });
-$('levShow').addEventListener('change', e=>{
+gid('levShow').addEventListener('change', e=>{
   const v = Math.max(1,Math.min(2000, parseInt(e.target.value)||1));
-  prefs.lev = v; $('levRange').value=v; $('levShow').value=v+'x'; savePrefs();
+  prefs.lev=v; gid('levRange').value=v; gid('levShow').value=v+'x'; savePrefs();
 });
 
 /* Lot stepper */
 function lotClamp(v){ v=Math.round(v*100)/100; if(v<0.01)v=0.01; if(v>100)v=100; return v; }
-$('lotMinus').onclick=()=>{ prefs.lot=lotClamp(prefs.lot-0.01); $('lotInp').value=prefs.lot.toFixed(2); savePrefs(); };
-$('lotPlus').onclick=()=>{ prefs.lot=lotClamp(prefs.lot+0.01); $('lotInp').value=prefs.lot.toFixed(2); savePrefs(); };
-$('lotInp').addEventListener('change',e=>{ prefs.lot=lotClamp(parseFloat(e.target.value)||0.01); e.target.value=prefs.lot.toFixed(2); savePrefs(); });
+gid('lotMinus').onclick=()=>{ prefs.lot=lotClamp(prefs.lot-0.01); gid('lotInp').value=prefs.lot.toFixed(2); savePrefs(); };
+gid('lotPlus').onclick =()=>{ prefs.lot=lotClamp(prefs.lot+0.01); gid('lotInp').value=prefs.lot.toFixed(2); savePrefs(); };
+gid('lotInp').addEventListener('change',e=>{ prefs.lot=lotClamp(parseFloat(e.target.value)||0.01); e.target.value=prefs.lot.toFixed(2); savePrefs(); });
 
-$('pairSel').onchange=e=>{ prefs.pair=e.target.value; savePrefs(); };
-$('tfSel').onchange=e=>{ prefs.tf=e.target.value; savePrefs(); };
-$('tradeSize').onchange=e=>{ prefs.size=+e.target.value||100; savePrefs(); };
-$('strategyA').onchange=e=>{ prefs.stratA=e.target.value; savePrefs(); };
-$('strategyB').onchange=e=>{ prefs.stratB=e.target.value; savePrefs(); };
+/* Other inputs */
+gid('pairSel').onchange=e=>{ prefs.pair=e.target.value; savePrefs(); };
+gid('tfSel').onchange  =e=>{ prefs.tf=e.target.value; savePrefs(); };
+gid('tradeSize').onchange=e=>{ prefs.size=+e.target.value||100; savePrefs(); };
+gid('strategyA').onchange=e=>{ prefs.stratA=e.target.value; savePrefs(); };
+gid('strategyB').onchange=e=>{ prefs.stratB=e.target.value; savePrefs(); };
 ['indEma','indBb','indRsi','indPivots','indMacd'].forEach(k=>{
-  $(k).addEventListener('change',e=>{ prefs.ind[k]=e.target.checked; savePrefs(); });
+  gid(k).addEventListener('change',e=>{ prefs.ind[k]=e.target.checked; savePrefs(); });
 });
 
 /* Reset capital */
-$('resetBtn').onclick=()=>{
+gid('resetBtn').onclick=()=>{
   const val = parseFloat(prompt('Set start capital (USDT):', String(capital.balance)))||capital.balance;
   capital={balance:val,pnl:0,margin:0}; store.set(capKey,capital); paintCapital();
 };
 
-/* ---------- TradingView embed helpers ---------- */
+/* ===== TradingView helpers ===== */
 const symMap = s=>{
   if(s.includes('GOLD')) return 'OANDA:XAUUSD';
   if(s.includes('USOIL')) return 'TVC:USOIL';
   const [a,b]=s.split('/'); return `${a}${b}:BINANCE`;
 };
-
-let tvHome, tvMarket;
 function loadTV(container, symbol, interval){
   new TradingView.widget({
-    container_id: container,
-    autosize: true,
-    symbol: symMap(symbol),
-    interval: String(interval),
-    timezone: "Etc/UTC",
-    theme: "dark",
-    style: "1",
-    locale: "en",
-    hide_top_toolbar: true,
-    hide_legend: false,
-    allow_symbol_change: false,
-    studies: [],
+    container_id: container, autosize:true, symbol:symMap(symbol), interval:String(interval),
+    timezone:"Etc/UTC", theme:"dark", style:"1", locale:"en",
+    hide_top_toolbar:true, allow_symbol_change:false, studies:[]
   });
 }
 function reloadHomeChart(){ loadTV('tvChart', prefs.pair, prefs.tf); }
-function reloadMarketChart(){ loadTV('mChart', byId('mPair').value, byId('mTf').value); }
+function reloadMarketChart(){ loadTV('mChart', gid('mPair').value, gid('mTf').value); }
 
-/* Apply to Chart */
-$('applyChartBtn').onclick=()=>{ reloadHomeChart(); alert('Applied (demo): strategy & indicators selections saved.'); };
-$('resetPrefsBtn').onclick=()=>{
+gid('applyChartBtn').onclick=()=>{ reloadHomeChart(); alert('Applied (demo)'); };
+gid('resetPrefsBtn').onclick =()=>{
   prefs = JSON.parse(JSON.stringify(defPrefs)); savePrefs();
-  // repaint
-  $('pairSel').value=prefs.pair; $('tfSel').value=prefs.tf;
-  $('levRange').value=prefs.lev; $('levShow').value=prefs.lev+'x';
-  $('lotInp').value=prefs.lot.toFixed(2); $('tradeSize').value=prefs.size;
-  $('strategyA').value=prefs.stratA; $('strategyB').value=prefs.stratB;
-  ['indEma','indBb','indRsi','indPivots','indMacd'].forEach(k=>$(k).checked=prefs.ind[k]);
+  gid('pairSel').value=prefs.pair; gid('tfSel').value=prefs.tf;
+  gid('levRange').value=prefs.lev; gid('levShow').value=prefs.lev+'x';
+  gid('lotInp').value=prefs.lot.toFixed(2); gid('tradeSize').value=prefs.size;
+  gid('strategyA').value=prefs.stratA; gid('strategyB').value=prefs.stratB;
+  ['indEma','indBb','indRsi','indPivots','indMacd'].forEach(k=>gid(k).checked=prefs.ind[k]);
 };
 
-/* ---------- Market page ---------- */
-byId('mPair').value=prefs.pair; byId('mTf').value=prefs.tf;
-byId('mReload').onclick=reloadMarketChart;
+/* ===== Market page ===== */
+gid('mPair').value=prefs.pair; gid('mTf').value=prefs.tf;
+gid('mReload').onclick=reloadMarketChart;
 
-/* ---------- Positions (demo) ---------- */
-const posList = byId('posList'); let posTab='open'; const demo = {open:[],pending:[],closed:[]};
+/* ===== Positions (demo) ===== */
+const posList = gid('posList'); let posTab='open'; const demo = {open:[],pending:[],closed:[]};
 function paintPositions(){
   posList.innerHTML = '<div class="rowp head"><div>Symbol</div><div>Size</div><div>Price</div><div>PnL</div></div>' +
     demo[posTab].map(p=>`<div class="rowp"><div>${p.sym}</div><div>${p.size}</div><div>${p.price}</div><div>${p.pnl}</div></div>`).join('');
@@ -364,23 +305,17 @@ document.querySelectorAll('.seg .btn').forEach(b=>{
 paintPositions();
 
 /* Start/Stop demo */
-$('startBtn').onclick=()=>{
-  // create one demo position
+gid('startBtn').onclick=()=>{
   demo.open=[{sym:prefs.pair,size:prefs.lot.toFixed(2),price:'—',pnl:'+0.00'}];
-  paintPositions();
-  alert('Algo Started (demo).');
+  paintPositions(); alert('Algo Started (demo).');
 };
-$('stopBtn').onclick=()=>{ alert('Algo Stopped (demo).'); };
+gid('stopBtn').onclick =()=> alert('Algo Stopped (demo).');
 
-/* ---------- Initial charts ---------- */
-reloadHomeChart();
-reloadMarketChart();
+/* Initial charts */
+reloadHomeChart(); reloadMarketChart();
 
-/* ---------- Make capital pill non-overlapping on small screens ---------- */
-function adjustCap(){
-  const y = window.scrollY;
-  byId('capCard').style.top = (y>20? 12 : 64) + 'px';
-}
+/* Capital pill adjust on scroll */
+function adjustCap(){ gid('capCard').style.top = (window.scrollY>20? 12 : 64)+'px'; }
 window.addEventListener('scroll',adjustCap);
 </script>
 </body>
